@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-
+import { StatusCodes } from 'http-status-codes';
 const prisma = new PrismaClient();
 
 export const addShop = async (req: Request, res: Response) => {
@@ -23,7 +23,7 @@ export const addShop = async (req: Request, res: Response) => {
     });
 
     if (shopExist) {
-      return res.status(400).json({ message: 'Shop already exists' });
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Shop already exists' });
     }
 
     // Convert time strings to ISO 8601 format
@@ -53,11 +53,11 @@ export const addShop = async (req: Request, res: Response) => {
     });
 
     return res
-      .status(201)
+      .status(StatusCodes.CREATED)
       .json({ message: 'Shop added successfully', data: shop });
   } catch (error) {
     console.error('Error while adding shop:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -80,7 +80,7 @@ export const addMenu = async (req: Request, res: Response) => {
 
     if (checkMenueExist) {
       return res
-        .status(400)
+        .status(StatusCodes.BAD_REQUEST)
         .json({ message: 'Menu already exists with this name' });
     }
 
@@ -99,11 +99,11 @@ export const addMenu = async (req: Request, res: Response) => {
     });
 
     return res
-      .status(201)
+      .status(StatusCodes.CREATED)
       .json({ message: 'Menu added successfully', data: menu });
   } catch (error) {
     console.error('Error while adding menu:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -123,7 +123,7 @@ export const createCategory = async (req: Request, res: Response) => {
 
     if (checkCategoryExist) {
       return res
-        .status(400)
+        .status(StatusCodes.BAD_REQUEST)
         .json({ message: 'Category already exists with this name' });
     }
 
@@ -137,11 +137,11 @@ export const createCategory = async (req: Request, res: Response) => {
     });
 
     return res
-      .status(201)
+      .status(StatusCodes.CREATED)
       .json({ message: 'Category added successfully', data: category });
   } catch (error) {
     console.error('Error while adding category:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -154,10 +154,10 @@ export const getCategories = async (req: Request, res: Response) => {
         shopId,
       },
     });
-    return res.status(200).json({ data: categories });
+    return res.status(StatusCodes.OK).json({ data: categories });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -171,10 +171,10 @@ export const getMenus = async (req: Request, res: Response) => {
         shopId,
       },
     });
-    return res.status(200).json({ data: menus });
+    return res.status(StatusCodes.OK).json({ data: menus });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -191,10 +191,10 @@ export const getallPendingOrders = async (req: Request, res: Response) => {
         items: true,
       },
     });
-    return res.status(200).json({ data: orders });
+    return res.status(StatusCodes.OK).json({ data: orders });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -212,9 +212,9 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
         status,
       },
     });
-    return res.status(200).json({ message: 'Order status updated successfully', data: updatedOrder });
+    return res.status(StatusCodes.OK).json({ message: 'Order status updated successfully', data: updatedOrder });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
