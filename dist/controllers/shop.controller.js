@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { StatusCodes } from 'http-status-codes';
 const prisma = new PrismaClient();
 export const addShop = async (req, res) => {
     try {
@@ -8,7 +9,7 @@ export const addShop = async (req, res) => {
             where: { name },
         });
         if (shopExist) {
-            return res.status(400).json({ message: 'Shop already exists' });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Shop already exists' });
         }
         // Convert time strings to ISO 8601 format
         const formattedOperatingHours = operatingHours.map((hours) => ({
@@ -35,12 +36,12 @@ export const addShop = async (req, res) => {
             include: { operatingHours: true }, // Include operating hours in the response
         });
         return res
-            .status(201)
+            .status(StatusCodes.CREATED)
             .json({ message: 'Shop added successfully', data: shop });
     }
     catch (error) {
         console.error('Error while adding shop:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
     }
 };
 export const addMenu = async (req, res) => {
@@ -52,7 +53,7 @@ export const addMenu = async (req, res) => {
         });
         if (checkMenueExist) {
             return res
-                .status(400)
+                .status(StatusCodes.BAD_REQUEST)
                 .json({ message: 'Menu already exists with this name' });
         }
         const menu = await prisma.menuItem.create({
@@ -69,12 +70,12 @@ export const addMenu = async (req, res) => {
             },
         });
         return res
-            .status(201)
+            .status(StatusCodes.CREATED)
             .json({ message: 'Menu added successfully', data: menu });
     }
     catch (error) {
         console.error('Error while adding menu:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
     }
 };
 export const createCategory = async (req, res) => {
@@ -86,7 +87,7 @@ export const createCategory = async (req, res) => {
         });
         if (checkCategoryExist) {
             return res
-                .status(400)
+                .status(StatusCodes.BAD_REQUEST)
                 .json({ message: 'Category already exists with this name' });
         }
         const category = await prisma.category.create({
@@ -98,12 +99,12 @@ export const createCategory = async (req, res) => {
             },
         });
         return res
-            .status(201)
+            .status(StatusCodes.CREATED)
             .json({ message: 'Category added successfully', data: category });
     }
     catch (error) {
         console.error('Error while adding category:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
     }
 };
 export const getCategories = async (req, res) => {
@@ -114,11 +115,11 @@ export const getCategories = async (req, res) => {
                 shopId,
             },
         });
-        return res.status(200).json({ data: categories });
+        return res.status(StatusCodes.OK).json({ data: categories });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
     }
 };
 export const getMenus = async (req, res) => {
@@ -129,11 +130,11 @@ export const getMenus = async (req, res) => {
                 shopId,
             },
         });
-        return res.status(200).json({ data: menus });
+        return res.status(StatusCodes.OK).json({ data: menus });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
     }
 };
 export const getallPendingOrders = async (req, res) => {
@@ -148,11 +149,11 @@ export const getallPendingOrders = async (req, res) => {
                 items: true,
             },
         });
-        return res.status(200).json({ data: orders });
+        return res.status(StatusCodes.OK).json({ data: orders });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
     }
 };
 // updare the odere status
@@ -168,10 +169,10 @@ export const updateOrderStatus = async (req, res) => {
                 status,
             },
         });
-        return res.status(200).json({ message: 'Order status updated successfully', data: updatedOrder });
+        return res.status(StatusCodes.OK).json({ message: 'Order status updated successfully', data: updatedOrder });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
     }
 };

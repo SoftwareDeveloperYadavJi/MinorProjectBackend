@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { StatusCodes } from "http-status-codes";
 const prisma = new PrismaClient();
 export const addFoodCourt = async (req, res) => {
     try {
@@ -9,7 +10,7 @@ export const addFoodCourt = async (req, res) => {
             }
         });
         if (foodCourtExist) {
-            return res.status(400).json({ message: "Food Court already exist" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Food Court already exists" });
         }
         const foodCourt = await prisma.foodCourt.create({
             data: {
@@ -17,21 +18,21 @@ export const addFoodCourt = async (req, res) => {
                 location: location
             }
         });
-        return res.status(201).json({ message: "Food Court added successfully", data: foodCourt });
+        return res.status(StatusCodes.CREATED).json({ message: "Food Court created successfully", data: foodCourt });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
     }
 };
 export const getFoodCourts = async (req, res) => {
     try {
         const foodCourts = await prisma.foodCourt.findMany();
-        return res.status(200).json({ data: foodCourts });
+        return res.status(StatusCodes.OK).json({ data: foodCourts });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
     }
 };
 export const removeFoodCourt = async (req, res) => {
@@ -41,11 +42,11 @@ export const removeFoodCourt = async (req, res) => {
                 id: req.params.id
             }
         });
-        return res.status(200).json({ message: "Food Court removed successfully", data: foodCourt });
+        return res.status(StatusCodes.OK).json({ message: "Food Court removed successfully", data: foodCourt });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
     }
 };
 export const getFoodCourtById = async (req, res) => {
@@ -60,11 +61,11 @@ export const getFoodCourtById = async (req, res) => {
                 shops: true,
             },
         });
-        return res.status(200).json({ data: foodCourt });
+        return res.status(StatusCodes.OK).json({ data: foodCourt });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
     }
 };
 // get total number of pending orders for a food court
@@ -77,10 +78,10 @@ export const getTotalPendingOrders = async (req, res) => {
                 status: 'PENDING',
             },
         });
-        return res.status(200).json({ pendingOrders: totalPendingOrders });
+        return res.status(StatusCodes.OK).json({ pendingOrders: totalPendingOrders });
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
     }
 };

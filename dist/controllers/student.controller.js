@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { generateRandomNumber } from "../utils/generateOtp.js";
 import { EmailSender } from "../services/email.service.js";
 import z from "zod";
+import { StatusCodes } from "http-status-codes";
 const prisma = new PrismaClient();
 const emailSchema = z.string().email().refine((email) => email.endsWith("@paruluniversity.ac.in"), {
     message: "Invalid email address",
@@ -12,11 +13,11 @@ export const studentRegister = async (req, res) => {
     try {
         const { name, email, password, phoneNumber } = req.body;
         if (!name || !email || !password || !phoneNumber) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "All fields are required" });
         }
         const emailValidation = emailSchema.safeParse(email);
         if (!emailValidation.success) {
-            return res.status(400).json({ message: "Email address is not associated with Parul University Or Invalid email address" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Email address is not associated with Parul University Or Invalid email address" });
         }
         const existingStudent = await prisma.student.findUnique({
             where: {
@@ -24,7 +25,7 @@ export const studentRegister = async (req, res) => {
             },
         });
         if (existingStudent) {
-            return res.status(400).json({ message: "Student already exists" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Student already exists" });
         }
         const otp = generateRandomNumber(6);
         const hashPassword = await bcrypt.hash(password, 10);
@@ -41,11 +42,11 @@ export const studentRegister = async (req, res) => {
         const token = jsonwebtoken.sign({ id: student.id }, process.env.JWT_SECRET, {
             expiresIn: "1d",
         });
-        return res.status(201).json({ message: "Student created successfully", token });
+        return res.status(StatusCodes.CREATED).json({ message: "Student created successfully", token });
     }
     catch (error) {
         console.log("Error in studentRegister", error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
     }
 };
 const sendOTP = async (name, email, otp) => {
@@ -61,7 +62,7 @@ export const studentLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "All fields are required" });
         }
         const student = await prisma.student.findUnique({
             where: {
@@ -69,20 +70,20 @@ export const studentLogin = async (req, res) => {
             },
         });
         if (!student) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid credentials" });
         }
         const isPasswordValid = await bcrypt.compare(password, student.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid credentials" });
         }
         const token = jsonwebtoken.sign({ id: student.id }, process.env.JWT_SECRET, {
             expiresIn: "1d",
         });
-        return res.status(200).json({ message: "Login successful", token });
+        return res.status(StatusCodes.OK).json({ message: "Login successful", token });
     }
     catch (error) {
         console.log("Error in studentLogin", error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
     }
 };
 export const studentVerfify = async (req, res) => {
@@ -95,10 +96,10 @@ export const studentVerfify = async (req, res) => {
             },
         });
         if (!student) {
-            return res.status(400).json({ message: "Student not found" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Student not found" });
         }
         if (student.otp !== otp) {
-            return res.status(400).json({ message: "Invalid OTP" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid OTP" });
         }
         await prisma.student.update({
             where: {
@@ -109,20 +110,20 @@ export const studentVerfify = async (req, res) => {
                 otp: null,
             },
         });
-        return res.status(200).json({ message: "Student verified successfully" });
+        return res.status(StatusCodes.OK).json({ message: "Student verified successfully" });
     }
     catch (error) {
         console.log("Error in studentVerfify", error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
     }
 };
 export const dectectDensity = async (req, res) => {
     try {
-        res.status(200).json({ message: "Successfully detected density" });
+        res.status(StatusCodes.OK).json({ message: "Successfully detected density" });
     }
     catch (error) {
         console.log("Error in dectectDensity", error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
     }
 };
 // Function to generate a unique order number
@@ -144,7 +145,7 @@ export const cerateOrder = async (req, res) => {
         const { studentId, foodCourtId, shopId, totalAmount, paymentMethod, items } = req.body;
         // Validate input
         if (!studentId || !shopId || !totalAmount || !paymentMethod || !items || items.length === 0 || !foodCourtId) {
-            return res.status(400).json({ error: 'All fields are required' });
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: 'All fields are required' });
         }
         // Generate unique order number
         const orderNumber = await generateOrderNumber();
@@ -171,10 +172,10 @@ export const cerateOrder = async (req, res) => {
             },
             include: { items: true },
         });
-        return res.status(201).json({ message: 'Order created successfully', order: newOrder });
+        return res.status(StatusCodes.CREATED).json({ message: 'Order created successfully', order: newOrder });
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Something went wrong' });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Something went wrong' });
     }
 };
