@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Parul University Campus Cuisine</title>
+    <style>
+        :root {
+            --primary-color: #E73B4E;
+            /* Parul University Red */
+            --secondary-color: #F6B819;
+            /* Parul University Yellow */
+            --text-color: #2c3e50;
+            --light-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px 0;
+            background-color: var(--primary-color);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .logo {
+            width: 200px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .header {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .welcome-text {
+            color: var(--text-color);
+            font-size: 16px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .otp-container {
+            background: linear-gradient(135deg, var(--primary-color), #ff6b7d);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .otp {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin: 10px 0;
+        }
+
+        .features {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            color: var(--text-color);
+        }
+
+        .feature-icon {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .university-name {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .validity-notice {
+            background-color: #fff3cd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .accreditation {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="https://uploads.sarvgyan.com/2023/03/Parul-Logo.jpeg" alt="Parul University Logo" class="logo">
+            <div class="accreditation">NAAC A++ ACCREDITED UNIVERSITY</div>
+        </div>
+
+        <div class="header">
+            Welcome to <span class="university-name">Parul University</span> Campus Cuisine
+        </div>
+
+        <div class="welcome-text">
+            <p>Dear <strong>{{userName}}</strong>,</p>
+            <p>Thank you for joining <strong>Campus Cuisine</strong>, Parul University's official food ordering platform.
+                We're excited to enhance your campus dining experience with our smart ordering system.</p>
+        </div>
+
+        <div class="otp-container">
+            <div>Verification Code</div>
+            <div class="otp">{{otp}}</div>
+            <div>Please use this code to complete your account verification</div>
+        </div>
+
+        <div class="validity-notice">
+            ⏰ This verification code will expire in 10 minutes for security purposes.
+        </div>
+
+        <div class="features">
+            <h3 style="color: var(--primary-color); margin-top: 0;">What's in store for you:</h3>
+            <div class="feature-item">
+                <span class="feature-icon">📊</span>
+                Real-time crowd monitoring at campus food courts
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">⚡</span>
+                Quick and easy digital ordering system
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🎯</span>
+                Exclusive deals for Parul University students
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Parul University CampusEats</p>
+            <p>Vadodara, Gujarat, India</p>
+            <p>Making Campus Dining Smarter</p>
+        </div>
+    </div>
+</body>
+
+</html>

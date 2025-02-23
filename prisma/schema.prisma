@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  password     String
+  isVerified   Boolean   @default(false)
+  otp          String?
+  refreshToken String?
+  lastLogin    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  phoneNumber  String    @unique
+  orders       Order[]
+}
+
+model ShopKeeper {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  name            String
+  phoneNumber     String
+  isVerified      Boolean   @default(false)
+  verificationDoc String?
+  refreshToken    String?
+  lastLogin       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  shops           Shop[]
+}
+
+model Shop {
+  id             String           @id @default(cuid())
+  name           String
+  description    String?
+  foodCourtId    String
+  gstNumber      String?
+  license        String?
+  contactEmail   String
+  contactPhone   String
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  shopKeeperId   String
+  menuItems      MenuItem[]
+  operatingHours OperatingHours[]
+  orders         Order[]
+  categories     category[]
+  foodCourt      FoodCourt        @relation(fields: [foodCourtId], references: [id])
+  shopKeeper     ShopKeeper       @relation(fields: [shopKeeperId], references: [id])
+  analytics      ShopAnalytics?
+}
+
+model ShopAnalytics {
+  id                String          @id @default(cuid())
+  shopId            String          @unique
+  totalOrders       Int             @default(0)
+  totalRevenue      Decimal         @default(0) @db.Decimal(10, 2)
+  averageOrderValue Decimal         @default(0) @db.Decimal(10, 2)
+  updatedAt         DateTime        @updatedAt
+  dailyReports      DailyReport[]
+  monthlyReports    MonthlyReport[]
+  peakHours         PeakHour[]
+  popularItems      PopularItem[]
+  shop              Shop            @relation(fields: [shopId], references: [id])
+}
+
+model PopularItem {
+  id          String        @id @default(cuid())
+  analyticsId String
+  menuItemId  String
+  orderCount  Int
+  revenue     Decimal       @db.Decimal(10, 2)
+  period      String
+  date        DateTime
+  analytics   ShopAnalytics @relation(fields: [analyticsId], references: [id])
+  // menuItem    MenuItem      @relation(fields: [menuItemId], references: [id])
+}
+
+model PeakHour {
+  id          String        @id @default(cuid())
+  analyticsId String
+  hourOfDay   Int
+  orderCount  Int
+  revenue     Decimal       @db.Decimal(10, 2)
+  dayOfWeek   Int
+  analytics   ShopAnalytics @relation(fields: [analyticsId], references: [id])
+}
+
+model DailyReport {
+  id              String        @id @default(cuid())
+  analyticsId     String
+  date            DateTime      @db.Date
+  totalOrders     Int
+  totalRevenue    Decimal       @db.Decimal(10, 2)
+  cancelledOrders Int
+  avgPrepTime     Int
+  topSellingItems Json
+  analytics       ShopAnalytics @relation(fields: [analyticsId], references: [id])
+  feedback        Feedback[]
+}
+
+model MonthlyReport {
+  id                String        @id @default(cuid())
+  analyticsId       String
+  month             DateTime      @db.Date
+  totalOrders       Int
+  totalRevenue      Decimal       @db.Decimal(10, 2)
+  growthRate        Decimal       @db.Decimal(5, 2)
+  averageOrderValue Decimal       @db.Decimal(10, 2)
+  topCategories     Json
+  customerRetention Decimal       @db.Decimal(5, 2)
+  analytics         ShopAnalytics @relation(fields: [analyticsId], references: [id])
+}
+
+model category {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  shopId      String
+  shop        Shop        @relation(fields: [shopId], references: [id])
+  MenuItem    MenuItem[]
+}
+
+model MenuItem {
+  id              String        @id @default(cuid())
+  name            String
+  description     String?
+  price           Decimal       @db.Decimal(10, 2)
+  preparationTime Int
+  isAvailable     Boolean       @default(true)
+  shopId          String
+  image           String?
+  categoryId      String
+  category        category      @relation(fields: [categoryId], references: [id])
+  shop            Shop          @relation(fields: [shopId], references: [id])
+  orderItems      OrderItem[]
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  shopId          String
+  orderNumber     String        @unique
+  studentId       String
+  status          OrderStatus
+  totalAmount     Decimal       @db.Decimal(10, 2)
+  paymentStatus   PaymentStatus
+  paymentMethod   PaymentMethod
+  preparationTime Int?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  feedback        Feedback?
+  shop            Shop          @relation(fields: [shopId], references: [id])
+  student         Student      @relation(fields: [studentId], references: [id])
+  items           OrderItem[]
+  foodCourtId     String
+  foodCourt       FoodCourt     @relation(fields: [foodCourtId], references: [id])
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  orderId    String
+  menuItemId String
+  quantity   Int
+  price      Decimal  @db.Decimal(10, 2)
+  notes      String?
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  order      Order    @relation(fields: [orderId], references: [id])
+}
+
+model Feedback {
+  id        String      @id @default(cuid())
+  orderId   String      @unique
+  rating    Int
+  comment   String?
+  reportId  String
+  createdAt DateTime    @default(now())
+  order     Order       @relation(fields: [orderId], references: [id])
+  report    DailyReport @relation(fields: [reportId], references: [id])
+}
+
+model FoodCourt {
+  id        String   @id @default(cuid())
+  name      String
+  location  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  shops     Shop[]
+  orders    Order[]
+}
+
+model OperatingHours {
+  id        String   @id @default(cuid())
+  shopId    String
+  dayOfWeek Int
+  openTime  DateTime @db.Time(6)
+  closeTime DateTime @db.Time(6)
+  isOpen    Boolean  @default(true)
+  shop      Shop     @relation(fields: [shopId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+  WALLET
+}
