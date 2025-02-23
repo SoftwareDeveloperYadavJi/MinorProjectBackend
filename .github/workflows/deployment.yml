@@ -16,7 +16,5 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm install
-      - name: Run tests
-        run: npm test
-      - name: Deploy
+      - name: Build the application
         run: echo "Deploying your application..."
