@@ -1,6 +1,5 @@
 import jsonwebtoken from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
-import ts from 'typescript';
 
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
