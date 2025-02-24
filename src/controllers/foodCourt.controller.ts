@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 export const addFoodCourt = async (req: Request, res: Response) => {
     try {
-        const { name, location } = req.body;
+        const { name, location , image } = req.body;
         const foodCourtExist = await prisma.foodCourt.findFirst({
             where: {
                 name: name
@@ -22,7 +22,8 @@ export const addFoodCourt = async (req: Request, res: Response) => {
         const foodCourt = await prisma.foodCourt.create({
             data: {
                 name: name,
-                location: location
+                location: location,
+                image: image
             }
         });
 
@@ -38,7 +39,7 @@ export const addFoodCourt = async (req: Request, res: Response) => {
 export const getFoodCourts = async (req: Request, res: Response) => {
     try {
         const foodCourts = await prisma.foodCourt.findMany();
-        
+
         return res.status(StatusCodes.OK).json({ data : foodCourts });
     } catch (error) {
         console.log(error);
