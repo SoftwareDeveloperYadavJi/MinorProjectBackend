@@ -11,6 +11,7 @@ export const addShop = async (req: Request, res: Response) => {
       foodCourtId,
       shopKeeperId,
       gstNumber,
+      images,
       license,
       contactEmail,
       contactPhone,
@@ -39,6 +40,7 @@ export const addShop = async (req: Request, res: Response) => {
       data: {
         name,
         description,
+        images,
         foodCourtId,
         shopKeeperId,
         gstNumber,
