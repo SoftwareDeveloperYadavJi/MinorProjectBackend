@@ -6,6 +6,7 @@ import  {generateRandomNumber}  from "../utils/generateOtp.js";
 import { EmailSender } from "../services/email.service.js";
 import z from "zod";
 import { StatusCodes } from "http-status-codes";
+import ts from "typescript";
 
 const prisma = new PrismaClient();
 
@@ -47,7 +48,7 @@ export const studentRegister = async (req: Request, res: Response) => {
         const token = jsonwebtoken.sign({ id: student.id }, process.env.JWT_SECRET!, {
             expiresIn: "1d",
         });
-        return res.status(StatusCodes.CREATED).json({ message: "Student created successfully", token });
+        return res.status(StatusCodes.CREATED).json({ message: "Student created successfully",token});
 
     } catch (error) {   
         console.log("Error in studentRegister", error);
@@ -98,8 +99,10 @@ export const studentLogin = async (req: Request , res: Response) => {
 export const studentVerfify = async(req: Request, res: Response) => {
     try {
         // id should come  from middleware
-        const {id , otp} = req.body;
-
+        // @ts-ignore
+        const  id  = req.user;
+        const{ otp } = req.body;
+        console.log(id);
         const student = await prisma.student.findUnique({
             where: {
                 id,
@@ -160,8 +163,20 @@ const generateOrderNumber = async () => {
 
 
 export const cerateOrder = async (req: Request, res: Response) => {
-     try {
-    const { studentId, foodCourtId, shopId, totalAmount, paymentMethod, items } = req.body;
+    try {
+        // @ts-ignore
+    const studentId = req.user;
+    // chek if student in db
+    const student = await prisma.student.findUnique({
+      where: {
+        id: studentId,
+      },
+    });
+    if (!student) {
+        return res.status(StatusCodes.NOT_FOUND).json({ error: 'Student not found' });
+    }
+    
+    const {  foodCourtId, shopId, totalAmount, paymentMethod, items } = req.body;
     // Validate input
     if (!studentId || !shopId || !totalAmount || !paymentMethod || !items || items.length === 0 || !foodCourtId) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: 'All fields are required' });
@@ -173,7 +188,7 @@ export const cerateOrder = async (req: Request, res: Response) => {
       data: {
         // @ts-ignore
         orderNumber,
-        studentId,
+        studentId: studentId,
         foodCourtId,
         shopId,
         status: 'PENDING',

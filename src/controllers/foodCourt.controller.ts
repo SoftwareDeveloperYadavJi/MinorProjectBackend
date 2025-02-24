@@ -38,7 +38,8 @@ export const addFoodCourt = async (req: Request, res: Response) => {
 export const getFoodCourts = async (req: Request, res: Response) => {
     try {
         const foodCourts = await prisma.foodCourt.findMany();
-        return res.status(StatusCodes.OK).json({ data: foodCourts });
+        
+        return res.status(StatusCodes.OK).json({ data : foodCourts });
     } catch (error) {
         console.log(error);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
