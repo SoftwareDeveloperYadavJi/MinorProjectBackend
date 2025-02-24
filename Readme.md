@@ -17,7 +17,7 @@ This is the backend of Campus Cuisine, a food ordering platform for Parul Univer
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/nitin-jain/Campus-Cuisine-Backend.git
+git clone https://github.com/SoftwareDeveloperYadavJi/MinorProjectBackend
 ```
 
 2. Install dependencies:
