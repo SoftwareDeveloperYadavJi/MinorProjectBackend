@@ -99,3 +99,22 @@ export const getTotalPendingOrders = async (req: Request, res: Response) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
     }
 }
+
+// get all shop in food court
+export const getAllShops = async (req: Request, res: Response) => {
+    try {
+        const foodCourtId = req.params.id;
+        const shops = await prisma.shop.findMany({
+            where: {
+                foodCourtId: foodCourtId,
+            },
+            include: {
+                orders: true,
+            },
+        });
+        return res.status(StatusCodes.OK).json({ shops: shops });
+    } catch (error) {
+        console.log(error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
+    }    
+}
