@@ -215,3 +215,46 @@ export const cerateOrder = async (req: Request, res: Response) => {
     return;
   }
 };
+
+
+export const resendOTP = async (req: Request, res: Response) => { 
+    try {
+        // @ts-ignore
+        const id = req.user;
+        const student = await prisma.student.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!student) {
+            res.status(StatusCodes.BAD_REQUEST).json({ message: "Student not found" });
+            return;
+        }
+
+        
+        if(student.isVerified){
+            res.status(StatusCodes.BAD_REQUEST).json({ message: "Student already verified" });
+            return;
+        }
+
+        
+        const otp = generateRandomNumber(6);
+
+        const updateStudent = await prisma.student.update({
+            where: {
+                id: student.id,
+            },
+            data: {
+                otp: otp,
+            },
+        });
+        sendOTP(updateStudent.name, updateStudent.email, otp);
+        res.status(StatusCodes.OK).json({ message: "OTP sent successfully" });
+
+    } catch (error) {
+        console.log("Error while Resending OTP", error);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error while Resending OTP" });
+        return;
+    }
+};

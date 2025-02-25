@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { studentLogin, studentRegister , studentVerfify , dectectDensity , cerateOrder } from "../controllers/student.controller.js";
+import { studentLogin, studentRegister , studentVerfify , dectectDensity , cerateOrder , resendOTP} from "../controllers/student.controller.js";
 
 import {verifyToken} from "../middleware/middleware.js";
 import { isStudentVerified } from "../middleware/isStudentVarified.js";
@@ -11,6 +11,7 @@ studentRouter.post("/login", studentLogin as any);
 studentRouter.post("/verfify",verifyToken, studentVerfify as any);
 studentRouter.post("/dectectDensity",verifyToken, dectectDensity as any);   
 studentRouter.post("/placeorder", verifyToken, isStudentVerified , cerateOrder as any);
+studentRouter.post("/resendOtp", verifyToken, resendOTP as any);
 
 
 export default studentRouter;
