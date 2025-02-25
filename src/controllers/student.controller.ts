@@ -164,14 +164,14 @@ const generateOrderNumber = async () => {
 
 export const cerateOrder = async (req: Request, res: Response) => {
     try {
-        // @ts-ignore
+    // @ts-ignore
     const studentId = req.user;
-    // chek if student in db
     const student = await prisma.student.findUnique({
       where: {
         id: studentId,
       },
     });
+    console.log(student);
     if (!student) {
         return res.status(StatusCodes.NOT_FOUND).json({ error: 'Student not found' });
     }
@@ -207,9 +207,11 @@ export const cerateOrder = async (req: Request, res: Response) => {
       include: { items: true },
     });
 
-    return res.status(StatusCodes.CREATED).json({ message: 'Order created successfully', order: newOrder });
+    res.status(StatusCodes.CREATED).json({ message: 'Order created successfully', order: newOrder });
+    return;
   } catch (error) {
     console.error(error);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Something went wrong' });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Something went wrong' });
+    return;
   }
 };
