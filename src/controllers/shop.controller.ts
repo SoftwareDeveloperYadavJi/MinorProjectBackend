@@ -91,7 +91,7 @@ export const addMenu = async (req: Request, res: Response) => {
         }
 
         const menu = await prisma.menuItem.create({
-            //@ts-ignore
+            // @ts-ignore
             data: {
                 name,
                 description,
@@ -112,7 +112,7 @@ export const addMenu = async (req: Request, res: Response) => {
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
             .json({ message: 'Internal Server Error' });
-    }
+    } 
 };
 
 export const createCategory = async (req: Request, res: Response) => {
@@ -218,12 +218,10 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
                 status,
             },
         });
-        return res
-            .status(StatusCodes.OK)
-            .json({
-                message: 'Order status updated successfully',
-                data: updatedOrder,
-            });
+        return res.status(StatusCodes.OK).json({
+            message: 'Order status updated successfully',
+            data: updatedOrder,
+        });
     } catch (error) {
         console.log(error);
         return res

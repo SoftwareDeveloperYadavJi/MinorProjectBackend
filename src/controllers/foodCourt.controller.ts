@@ -27,12 +27,10 @@ export const addFoodCourt = async (req: Request, res: Response) => {
             },
         });
 
-        return res
-            .status(StatusCodes.CREATED)
-            .json({
-                message: 'Food Court created successfully',
-                data: foodCourt,
-            });
+        return res.status(StatusCodes.CREATED).json({
+            message: 'Food Court created successfully',
+            data: foodCourt,
+        });
     } catch (error) {
         console.log(error);
         return res
@@ -62,12 +60,10 @@ export const removeFoodCourt = async (req: Request, res: Response) => {
             },
         });
 
-        return res
-            .status(StatusCodes.OK)
-            .json({
-                message: 'Food Court removed successfully',
-                data: foodCourt,
-            });
+        return res.status(StatusCodes.OK).json({
+            message: 'Food Court removed successfully',
+            data: foodCourt,
+        });
     } catch (error) {
         console.log(error);
         return res
