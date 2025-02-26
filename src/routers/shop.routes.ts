@@ -1,6 +1,13 @@
-import  { Router } from "express";
-import { addShop , addMenu , getMenus , createCategory , getCategories , getallPendingOrders , updateOrderStatus } from "../controllers/shop.controller.js";
-
+import { Router } from 'express';
+import {
+    addShop,
+    addMenu,
+    getMenus,
+    createCategory,
+    getCategories,
+    getallPendingOrders,
+    updateOrderStatus,
+} from '../controllers/shop.controller.js';
 
 const shopeRouter = Router();
 
@@ -13,11 +20,4 @@ shopeRouter.get('/getcategories/:id', getCategories as any);
 shopeRouter.get('/getallpendingorders/:id', getallPendingOrders as any);
 shopeRouter.put('/updateorderstatus/:id', updateOrderStatus as any);
 
-
-
-
-
 export default shopeRouter;
-
-
-

@@ -1,29 +1,27 @@
 import nodemailer from 'nodemailer';
 export class EmailSender {
-  private transporter: nodemailer.Transporter;
+    private transporter: nodemailer.Transporter;
 
-  constructor() {
-    // Updated configuration for Gmail
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',    // Specific Gmail SMTP server
-      port: 465,                 // SSL port for Gmail
-      secure: true,              // Use SSL
-      auth: {
-        user: process.env.MAIL_USERNAME,
-        pass: process.env.MAIL_PASSWORD,  // This should be an App Password for Gmail
-      },
-      tls: {
-        rejectUnauthorized: false  // Helps avoid certificate issues
-      }
-    });
-  }
+    constructor() {
+        // Updated configuration for Gmail
+        this.transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com', // Specific Gmail SMTP server
+            port: 465, // SSL port for Gmail
+            secure: true, // Use SSL
+            auth: {
+                user: process.env.MAIL_USERNAME,
+                pass: process.env.MAIL_PASSWORD, // This should be an App Password for Gmail
+            },
+            tls: {
+                rejectUnauthorized: false, // Helps avoid certificate issues
+            },
+        });
+    }
 
-
-
-  async sendOTPEmail(to: string, userName: string, otp: string) {
-    try {
-      console.log(`Sending OTP email to: ${to}`);
-      const html = `
+    async sendOTPEmail(to: string, userName: string, otp: string) {
+        try {
+            console.log(`Sending OTP email to: ${to}`);
+            const html = `
         <!DOCTYPE html>
 <html>
 <head>
@@ -100,21 +98,22 @@ export class EmailSender {
 </html>
       `;
 
-      const mailOptions = {
-        from: process.env.MAIL_FROM || '2203051050875@paruluniversity.ac.in',
-        to: to,
-        subject: 'Welcome to Parul University Campus Cuisine - Verify Your Account',
-        html: html
-      };
+            const mailOptions = {
+                from:
+                    process.env.MAIL_FROM ||
+                    '2203051050875@paruluniversity.ac.in',
+                to: to,
+                subject:
+                    'Welcome to Parul University Campus Cuisine - Verify Your Account',
+                html: html,
+            };
 
-      const result = await this.transporter.sendMail(mailOptions);
-      console.log('Email sent successfully');
-      return result;
-    } catch (error) {
-      console.error('Failed to send email:', error);
-      throw error;
+            const result = await this.transporter.sendMail(mailOptions);
+            console.log('Email sent successfully');
+            return result;
+        } catch (error) {
+            console.error('Failed to send email:', error);
+            throw error;
+        }
     }
-  }
 }
-
-

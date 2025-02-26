@@ -32,6 +32,12 @@ jobs:
           echo "MAIL_FROM=${{ secrets.MAIL_FROM }}" >> .env
           echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> .env
 
+      - name: Code Formating with Prettier
+        run: npm run format
+
+      - name: Linting with ESLint
+        run: npm run lint
+
       - name: Build the application
         run: npm run build
 

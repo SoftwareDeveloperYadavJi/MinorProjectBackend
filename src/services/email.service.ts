@@ -1,19 +1,19 @@
 import { Resend } from 'resend';
 
 export class EmailSender {
-  private resend: Resend;
+    private resend: Resend;
 
-  constructor() {
-    // Initialize Resend with API Key
-    this.resend = new Resend(process.env.RESEND_API_KEY);
-  }
+    constructor() {
+        // Initialize Resend with API Key
+        this.resend = new Resend(process.env.RESEND_API_KEY);
+    }
 
-  async sendOTPEmail(to: string, userName: string, otp: string) {
-    try {
-      console.log(`Sending OTP email to: ${to}`);
+    async sendOTPEmail(to: string, userName: string, otp: string) {
+        try {
+            console.log(`Sending OTP email to: ${to}`);
 
-      // Email content (same as your current HTML)
-      const html = `
+            // Email content (same as your current HTML)
+            const html = `
         <!DOCTYPE html>
         <html>
         <head>
@@ -64,19 +64,20 @@ export class EmailSender {
         </html>
       `;
 
-      // Send email using Resend
-      const result = await this.resend.emails.send({
-        from: process.env.MAIL_FROM || 'support@nitintech.dev',  // Use your Resend verified domain
-        to: to,
-        subject: 'Welcome to Parul University Campus Cuisine - Verify Your Account',
-        html: html
-      });
+            // Send email using Resend
+            const result = await this.resend.emails.send({
+                from: process.env.MAIL_FROM || 'support@nitintech.dev', // Use your Resend verified domain
+                to: to,
+                subject:
+                    'Welcome to Parul University Campus Cuisine - Verify Your Account',
+                html: html,
+            });
 
-      console.log('Email sent successfully:', result);
-      return result;
-    } catch (error) {
-      console.error('Failed to send email:', error);
-      throw error;
+            console.log('Email sent successfully:', result);
+            return result;
+        } catch (error) {
+            console.error('Failed to send email:', error);
+            throw error;
+        }
     }
-  }
 }
