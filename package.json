@@ -12,16 +12,10 @@
     "format": "prettier --write 'src/**/*.{js,ts,json,md}'"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nitin Yadav",
   "license": "ISC",
-  "description": "",
+  "description": "This is the backend of Campus Cuisine, a food ordering platform for Parul University students. It is built using Node.js, Express, Prisma, and TypeScript.",
   "dependencies": {
-    "@prisma/client": "^6.4.0",
-    "@types/bcrypt": "^5.0.2",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/jsonwebtoken": "^9.0.7",
-    "@types/nodemailer": "^6.4.17",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -45,6 +39,12 @@
     "prettier": "^3.5.2",
     "prisma": "^6.4.0",
     "ts-node": "^10.9.2",
-    "typescript-eslint": "^8.25.0"
+    "typescript-eslint": "^8.25.0",
+    "@prisma/client": "^6.4.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/nodemailer": "^6.4.17"
   }
 }
