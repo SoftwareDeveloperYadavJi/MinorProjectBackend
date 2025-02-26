@@ -36,4 +36,8 @@ jobs:
         run: npm run build
 
       - name: Start the application
-        run: npm run start
+        run: |
+          npm run start &
+          sleep 10
+          pkill -f "npm run start" # Kill the process
+
