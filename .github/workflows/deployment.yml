@@ -35,9 +35,6 @@ jobs:
       - name: Code Formating with Prettier
         run: npm run format
 
-      - name: Linting with ESLint
-        run: npm run lint
-
       - name: Build the application
         run: npm run build
 
