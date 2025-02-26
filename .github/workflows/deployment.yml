@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main  # Change this to your branch name if needed
+  pull_request:
+    branches:
+      - main # Run on pull request to main
 
 jobs:
   deploy:
