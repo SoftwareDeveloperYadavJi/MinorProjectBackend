@@ -220,3 +220,6 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
+
+
+// get all menu items 
