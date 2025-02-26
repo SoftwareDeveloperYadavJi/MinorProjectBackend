@@ -74,8 +74,6 @@ export const removeFoodCourt = async (req: Request, res: Response) => {
 
 export const getFoodCourtById = async (req: Request, res: Response) => {
     try {
-        // @ts-ignore
-        const { id } = req.params.id;
         const foodCourt = await prisma.foodCourt.findUnique({
             where: {
                 id: req.params.id,

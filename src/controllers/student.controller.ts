@@ -16,6 +16,11 @@ const emailSchema = z
     .refine((email) => email.endsWith('@paruluniversity.ac.in'), {
         message: 'Invalid email address',
     });
+
+interface CustomRequest extends Request {
+    user?: string;
+}
+
 export const studentRegister = async (req: Request, res: Response) => {
     try {
         const { name, email, password, phoneNumber } = req.body;
@@ -128,10 +133,13 @@ export const studentLogin = async (req: Request, res: Response) => {
     }
 };
 
-export const studentVerfify = async (req: Request, res: Response) => {
+
+
+
+export const studentVerfify = async (req: CustomRequest, res: Response) => {
     try {
         // id should come  from middleware
-        // @ts-ignore
+
         const id = req.user;
         const { otp } = req.body;
         console.log(id);
@@ -205,9 +213,13 @@ const generateOrderNumber = async () => {
     return orderNumber;
 };
 
-export const cerateOrder = async (req: Request, res: Response) => {
+interface coustomRequest extends Request {
+    user?: string;
+}
+
+
+export const cerateOrder = async (req: coustomRequest,res: Response) => {
     try {
-        // @ts-ignore
         const studentId = req.user;
         const student = await prisma.student.findUnique({
             where: {
@@ -240,20 +252,29 @@ export const cerateOrder = async (req: Request, res: Response) => {
         // Generate unique order number
         const orderNumber = await generateOrderNumber();
         // Create order in the database
+        if(orderNumber == null){
+            return res
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
+                .json({ error: 'Error while generating order number' });
+        }
+        interface OrderItem {
+            menuItemId: string;
+            quantity: number;
+            price: number;
+        }
+
         const newOrder = await prisma.order.create({
             data: {
-                // @ts-ignore
                 orderNumber,
-                studentId: studentId,
-                foodCourtId,
-                shopId,
+                studentId: studentId as string,
+                foodCourtId: req.body.foodCourtId,
+                shopId: req.body.shopId,
                 status: 'PENDING',
-                totalAmount,
+                totalAmount: req.body.totalAmount,
                 paymentStatus: 'PENDING',
-                paymentMethod,
+                paymentMethod: req.body.paymentMethod,
                 items: {
-                    // @ts-ignore
-                    create: items.map((item) => ({
+                    create: req.body.items.map((item: OrderItem) => ({
                         menuItemId: item.menuItemId,
                         quantity: item.quantity,
                         price: item.price,
@@ -277,9 +298,9 @@ export const cerateOrder = async (req: Request, res: Response) => {
     }
 };
 
-export const resendOTP = async (req: Request, res: Response) => {
+export const resendOTP = async (req: coustomRequest, res: Response) => {
     try {
-        // @ts-ignore
+       
         const id = req.user;
         const student = await prisma.student.findUnique({
             where: {
