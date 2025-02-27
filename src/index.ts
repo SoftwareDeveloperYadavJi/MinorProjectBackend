@@ -5,7 +5,7 @@ import foodcourtRouter from './routers/foodcourt.routes.js';
 import shopeRouter from './routers/shop.routes.js';
 import { config } from './config/config.js';
 import studentRouter from './routers/student.routes.js';
-
+import { StatusCodes } from 'http-status-codes';
 const app = express();
 
 // This can be edit based on your need
@@ -21,8 +21,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    res.json({ message: 'API is working fine!' });
+app.get('/healthcheck', (req, res) => {
+    res.status(StatusCodes.OK).json({ message: 'API is working fine!' });
 });
 
 // routes
@@ -31,6 +31,6 @@ app.use('/api/v1/foodcourt', foodcourtRouter);
 app.use('/api/v1/shop', shopeRouter);
 app.use('/api/v1/student', studentRouter);
 
-app.listen(3000, () => {
-    console.log(`Server is running on http://localhost:${3000}`);
+app.listen(config.port, () => {
+    console.log(`Server is running on http://localhost:${config.port}`);
 });

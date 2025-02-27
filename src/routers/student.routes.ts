@@ -6,6 +6,7 @@ import {
     dectectDensity,
     cerateOrder,
     resendOTP,
+    getStudentpastOrders,
 } from '../controllers/student.controller.js';
 
 import { verifyToken } from '../middleware/middleware.js';
@@ -24,5 +25,6 @@ studentRouter.post(
     cerateOrder as any,
 );
 studentRouter.post('/resendOtp', verifyToken, resendOTP as any);
+studentRouter.get('/getmyorders', verifyToken, getStudentpastOrders as any);
 
 export default studentRouter;

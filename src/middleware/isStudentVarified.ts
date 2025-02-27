@@ -10,14 +10,16 @@ interface CustomRequest extends Request {
 export const isStudentVerified = async (
     req: CustomRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
 ) => {
     try {
         const id = req.user;
 
         if (!id) {
-             res.status(401).json({ message: 'Unauthorized: No user ID provided' });
-             return;
+            res.status(401).json({
+                message: 'Unauthorized: No user ID provided',
+            });
+            return;
         }
 
         const student = await prisma.student.findUnique({
@@ -25,13 +27,14 @@ export const isStudentVerified = async (
         });
 
         if (!student) {
-             res.status(404).json({ message: 'Student not found' });
-             return;
+            res.status(404).json({ message: 'Student not found' });
+            return;
         }
 
         if (!student.isVerified) {
-             res.status(400).json({
-                message: 'Student not verified! Please verify your account by submitting the OTP sent to your email.',
+            res.status(400).json({
+                message:
+                    'Student not verified! Please verify your account by submitting the OTP sent to your email.',
             });
             return;
         }

@@ -6,7 +6,6 @@ import { generateRandomNumber } from '../utils/generateOtp.js';
 import { EmailSender } from '../services/email.service.js';
 import z from 'zod';
 import { StatusCodes } from 'http-status-codes';
-import ts from 'typescript';
 
 const prisma = new PrismaClient();
 
@@ -133,9 +132,6 @@ export const studentLogin = async (req: Request, res: Response) => {
     }
 };
 
-
-
-
 export const studentVerfify = async (req: CustomRequest, res: Response) => {
     try {
         // id should come  from middleware
@@ -217,8 +213,7 @@ interface coustomRequest extends Request {
     user?: string;
 }
 
-
-export const cerateOrder = async (req: coustomRequest,res: Response) => {
+export const cerateOrder = async (req: coustomRequest, res: Response) => {
     try {
         const studentId = req.user;
         const student = await prisma.student.findUnique({
@@ -252,7 +247,7 @@ export const cerateOrder = async (req: coustomRequest,res: Response) => {
         // Generate unique order number
         const orderNumber = await generateOrderNumber();
         // Create order in the database
-        if(orderNumber == null){
+        if (orderNumber == null) {
             return res
                 .status(StatusCodes.INTERNAL_SERVER_ERROR)
                 .json({ error: 'Error while generating order number' });
@@ -300,7 +295,6 @@ export const cerateOrder = async (req: coustomRequest,res: Response) => {
 
 export const resendOTP = async (req: coustomRequest, res: Response) => {
     try {
-       
         const id = req.user;
         const student = await prisma.student.findUnique({
             where: {
@@ -340,5 +334,35 @@ export const resendOTP = async (req: coustomRequest, res: Response) => {
             message: 'Error while Resending OTP',
         });
         return;
+    }
+};
+
+export const getStudentpastOrders = async (
+    req: coustomRequest,
+    res: Response,
+) => {
+    try {
+        const studentId = req.user;
+        const student = await prisma.student.findUnique({
+            where: {
+                id: studentId,
+            },
+        });
+        if (!student) {
+            return res
+                .status(StatusCodes.NOT_FOUND)
+                .json({ error: 'Student not found' });
+        }
+        const orders = await prisma.order.findMany({
+            where: {
+                studentId: studentId,
+            },
+        });
+        return res.status(StatusCodes.OK).json({ data: orders });
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: 'Internal Server Error' });
     }
 };

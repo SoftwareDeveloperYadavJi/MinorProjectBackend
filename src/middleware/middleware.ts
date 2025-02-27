@@ -6,20 +6,20 @@ interface CustomRequest extends Request {
 }
 
 interface DecodedToken extends JwtPayload {
-    id: string; 
+    id: string;
 }
 
 export const verifyToken = (
     req: CustomRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
 ) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
 
         if (!token) {
             res.status(401).json({ message: 'No token provided' });
-            return
+            return;
         }
 
         // Ensure JWT_SECRET is available
@@ -31,8 +31,8 @@ export const verifyToken = (
         const verified = jsonwebtoken.verify(token, secret) as DecodedToken;
 
         if (!verified.id) {
-             res.status(400).json({ message: 'Invalid token structure' });
-             return;
+            res.status(400).json({ message: 'Invalid token structure' });
+            return;
         }
 
         req.user = verified.id;
