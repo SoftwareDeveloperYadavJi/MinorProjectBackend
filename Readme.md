@@ -10,6 +10,7 @@ This is the backend of Campus Cuisine, a food ordering platform for Parul Univer
 - Shop management
 - Order management
 - Student verification and OTP generation (Email and Phone number)
+- Real time crowd detection from various food courts
 
 
 ## Installation
