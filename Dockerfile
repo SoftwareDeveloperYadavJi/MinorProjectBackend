@@ -1,42 +1,23 @@
-# Stage 1: Build
-FROM node:20-alpine AS builder
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
 
+# Set the working directory in the container
 WORKDIR /app
 
-# Accept build arguments for Prisma
-ARG DATABASE_URL
-ENV DATABASE_URL=$DATABASE_URL
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
 # Install dependencies
-COPY package*.json ./
 RUN npm install
 
-# Copy source files
+# Copy the rest of the application files
 COPY . .
-
-# Ensure Prisma schema is included
-COPY prisma prisma
 
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build TypeScript project
-RUN npm run build
-
-# Stage 2: Run
-FROM node:20-alpine AS runner
-
-WORKDIR /app
-
-# Copy built files and dependencies
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma  
-
-# Set runtime environment variable (optional)
-ENV DATABASE_URL=$DATABASE_URL
-
+# Expose the application port
 EXPOSE 3000
 
-CMD ["node", "dist/index.js"]
+# Start the application
+CMD ["npm", "run", "start"]
