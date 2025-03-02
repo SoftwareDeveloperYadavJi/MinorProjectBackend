@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import {
     studentLogin,
     studentRegister,
@@ -28,6 +29,5 @@ studentRouter.post(
 studentRouter.post('/resendOtp', verifyToken, resendOTP as any);
 studentRouter.get('/getmyorders', verifyToken, getStudentpastOrders as any);
 studentRouter.get('/getprofile', verifyToken, studentPorfile as any);
-
 
 export default studentRouter;

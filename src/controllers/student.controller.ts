@@ -6,6 +6,7 @@ import { generateRandomNumber } from '../utils/generateOtp.js';
 import { EmailSender } from '../services/email.service.js';
 import z from 'zod';
 import { StatusCodes } from 'http-status-codes';
+import { uploadToCloudinary } from '../utils/uplodeImage.js';
 
 const prisma = new PrismaClient();
 
@@ -28,7 +29,16 @@ export const studentRegister = async (req: Request, res: Response) => {
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ message: 'All fields are required' });
         }
+        let profileImageUrl = '';
+        if (req.files && req.files.profile) {
+            const uploadResult = await uploadToCloudinary(
+                req.files.profile,
+                'profiles',
+            );
+            profileImageUrl = uploadResult.secure_url;
+        }
 
+        console.log(profileImageUrl);
         const emailValidation = emailSchema.safeParse(email);
         if (!emailValidation.success) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -56,6 +66,7 @@ export const studentRegister = async (req: Request, res: Response) => {
                 password: hashPassword,
                 phoneNumber,
                 otp,
+                image: profileImageUrl,
             },
         });
         sendOTP(name, email, otp);
@@ -132,8 +143,7 @@ export const studentLogin = async (req: Request, res: Response) => {
     }
 };
 
-
-export const studentPorfile= async (req: CustomRequest, res: Response) => {
+export const studentPorfile = async (req: CustomRequest, res: Response) => {
     try {
         // id should come  from middleware
         const id = req.user;
@@ -141,12 +151,12 @@ export const studentPorfile= async (req: CustomRequest, res: Response) => {
             where: {
                 id,
             },
-            select:{
-                name:true,
-                email:true,
-                phone:true,
-                image:true,
-            }
+            select: {
+                name: true,
+                email: true,
+                phoneNumber: true,
+                image: true,
+            },
         });
         if (!student) {
             return res
@@ -163,7 +173,6 @@ export const studentPorfile= async (req: CustomRequest, res: Response) => {
             .json({ message: 'Internal server error' });
     }
 };
-
 
 export const studentVerfify = async (req: CustomRequest, res: Response) => {
     try {

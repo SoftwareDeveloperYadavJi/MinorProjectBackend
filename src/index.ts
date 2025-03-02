@@ -6,6 +6,8 @@ import shopeRouter from './routers/shop.routes.js';
 import { config } from './config/config.js';
 import studentRouter from './routers/student.routes.js';
 import { StatusCodes } from 'http-status-codes';
+import fileUpload from 'express-fileupload';
+
 const app = express();
 
 // This can be edit based on your need
@@ -15,6 +17,13 @@ app.use(
         allowedHeaders: ['Content-Type', 'Authorization'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
+    }),
+);
+
+app.use(
+    fileUpload({
+        useTempFiles: true,
+        tempFileDir: '/tmp/',
     }),
 );
 
