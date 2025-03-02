@@ -132,6 +132,39 @@ export const studentLogin = async (req: Request, res: Response) => {
     }
 };
 
+
+export const studentPorfile= async (req: CustomRequest, res: Response) => {
+    try {
+        // id should come  from middleware
+        const id = req.user;
+        const student = await prisma.student.findUnique({
+            where: {
+                id,
+            },
+            select:{
+                name:true,
+                email:true,
+                phone:true,
+                image:true,
+            }
+        });
+        if (!student) {
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ message: 'Student not found' });
+        }
+        return res
+            .status(StatusCodes.OK)
+            .json({ message: 'Student profile', student });
+    } catch (error) {
+        console.log('Error in studentPorfile', error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: 'Internal server error' });
+    }
+};
+
+
 export const studentVerfify = async (req: CustomRequest, res: Response) => {
     try {
         // id should come  from middleware

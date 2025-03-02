@@ -11,6 +11,8 @@ model Student {
   id           String    @id @default(cuid())
   name         String
   email        String    @unique
+  image        String?
+  phone        String?
   password     String
   isVerified   Boolean   @default(false)
   otp          String?
