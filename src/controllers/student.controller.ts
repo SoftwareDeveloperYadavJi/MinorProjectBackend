@@ -38,14 +38,14 @@ export const studentRegister = async (req: Request, res: Response) => {
             profileImageUrl = uploadResult.secure_url;
         }
 
-        console.log(profileImageUrl);
-        const emailValidation = emailSchema.safeParse(email);
-        if (!emailValidation.success) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message:
-                    'Email address is not associated with Parul University Or Invalid email address',
-            });
-        }
+        // console.log(profileImageUrl);
+        // const emailValidation = emailSchema.safeParse(email);
+        // if (!emailValidation.success) {
+        //     return res.status(StatusCodes.BAD_REQUEST).json({
+        //         message:
+        //             'Email address is not associated with Parul University Or Invalid email address',
+        //     });
+        // }
 
         const existingStudent = await prisma.student.findUnique({
             where: {
