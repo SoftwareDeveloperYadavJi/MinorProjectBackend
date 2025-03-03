@@ -8,20 +8,21 @@ datasource db {
 }
 
 model Student {
-  id           String    @id @default(cuid())
-  name         String
-  email        String    @unique
-  image        String?
-  phone        String?
-  password     String
-  isVerified   Boolean   @default(false)
-  otp          String?
-  refreshToken String?
-  lastLogin    DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  phoneNumber  String    @unique
-  orders       Order[]
+  id                String    @id @default(cuid())
+  name              String
+  email             String    @unique
+  image             String?
+  phone             String?
+  password          String
+  registrationToken String?
+  isVerified        Boolean   @default(false)
+  otp               String?
+  refreshToken      String?
+  lastLogin         DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  phoneNumber       String    @unique
+  orders            Order[]
 }
 
 model ShopKeeper {
@@ -131,22 +132,22 @@ model category {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   shopId      String
-  shop        Shop        @relation(fields: [shopId], references: [id])
+  shop        Shop       @relation(fields: [shopId], references: [id])
   MenuItem    MenuItem[]
 }
 
 model MenuItem {
-  id              String        @id @default(cuid())
+  id              String      @id @default(cuid())
   name            String
   description     String?
-  price           Decimal       @db.Decimal(10, 2)
+  price           Decimal     @db.Decimal(10, 2)
   preparationTime Int
-  isAvailable     Boolean       @default(true)
+  isAvailable     Boolean     @default(true)
   shopId          String
   image           String?
   categoryId      String
-  category        category      @relation(fields: [categoryId], references: [id])
-  shop            Shop          @relation(fields: [shopId], references: [id])
+  category        category    @relation(fields: [categoryId], references: [id])
+  shop            Shop        @relation(fields: [shopId], references: [id])
   orderItems      OrderItem[]
 }
 
@@ -164,7 +165,7 @@ model Order {
   updatedAt       DateTime      @updatedAt
   feedback        Feedback?
   shop            Shop          @relation(fields: [shopId], references: [id])
-  student         Student      @relation(fields: [studentId], references: [id])
+  student         Student       @relation(fields: [studentId], references: [id])
   items           OrderItem[]
   foodCourtId     String
   foodCourt       FoodCourt     @relation(fields: [foodCourtId], references: [id])
@@ -195,7 +196,7 @@ model Feedback {
 model FoodCourt {
   id        String   @id @default(cuid())
   name      String
-  image     String?  
+  image     String?
   location  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,5 +1,14 @@
 node_modules
 # Keep environment variables out of version control
 .env
-
 dist
+
+src/utils/firebase-service-account.ts
+
+src/utils/firebseConfig.ts
+
+src/utils/firebaseMassaging.ts
+src/utils/firebaseConfig.ts
+
+
+src/config/firebase-service-account.ts

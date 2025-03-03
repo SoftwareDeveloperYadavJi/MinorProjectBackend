@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import messaging from '../utils/firebaseConfig';
+const registrationToken = 'dZjLC_2EQA25lASLviqxLu:APA91bGyYb6o8chThaI4uSd_WmxPY2_2qu_vTLOw9cdhKybVP1-Buaad6ywMVP_QJMqCM74RnMMm056-W7Fvv2c_aqgoZYxHTghJTJTz4MNjNnFd3zQZeoY';
 const prisma = new PrismaClient();
 
 export const addShop = async (req: Request, res: Response) => {
@@ -215,6 +217,28 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
             data: {
                 status,
             },
+            include: {
+               student: true
+            },
+        });
+
+        // get the name of the student
+        const studentName = updatedOrder.student.name;
+
+        const message = {
+            data: {
+                body: `Hi ${studentName}, Your order id is ${orderId} and status is ${status}`,
+            },
+            token: registrationToken,
+        };
+
+        messaging.send(message)
+            .then((response) => {
+                // Response is a message ID string.
+                console.log('Successfully sent message:', response);
+            })
+            .catch((error) => {
+                console.log('Error sending message:', error);
         });
         return res.status(StatusCodes.OK).json({
             message: 'Order status updated successfully',

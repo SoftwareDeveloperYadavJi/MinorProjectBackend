@@ -30,13 +30,19 @@ npm install
 3. Create a `.env` file in the root directory and add the following environment variables:
 
 ```bash
-DATABASE_URL=your-database-url
-JWT_SECRET=your-jwt-secret
-OTP_Lenght=your-otp-length
-MAIL_USERNAME=your-mail-username
-MAIL_PASSWORD=your-mail-password
-MAIL_FROM=your-mail-from
-DATABASE_URL=your-database-url
+DATABASE_URL="your-database-url"
+JWT_SECRET="your-jwt-secret"
+MAIL_HOST="your-mail-host"
+MAIL_PORT="your-mail-port"
+MAIL_PASSWORD="your-mail-password"
+MAIL_USERNAME="your-mail-username"
+MAIL_FROM="your-mail-from"
+RESEND_API_KEY="your-resend-api-key"
+MAIL_FROM="your-mail-from"
+CLOUDINARY_API_KEY="your-cloudinary-api-key"
+CLOUDINARY_API_SECRET="your-cloudinary-api-secret"
+CLOUDINARY_CLOUD_NAME="your-cloudinary-cloud-name"
+
 ```
 
 4. Run the server:
