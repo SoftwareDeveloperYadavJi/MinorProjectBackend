@@ -408,3 +408,55 @@ export const getStudentpastOrders = async (
             .json({ message: 'Internal Server Error' });
     }
 };
+
+
+export const updateStudentProfile = async (req: coustomRequest, res: Response) => {
+    try {
+        const studentId = req.user;
+        const { name, password, phoneNumber } = req.body;
+        if (!name  || !password || !phoneNumber) {
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ message: 'All fields are required' });
+        }
+        let profileImageUrl = '';
+        if (req.files && req.files.profile) {
+            const uploadResult = await uploadToCloudinary(
+                req.files.profile,
+                'profiles',
+            );
+            profileImageUrl = uploadResult.secure_url;
+        }
+
+        const hashPassword = await bcrypt.hash(password, 10);
+
+        const updatedStudent = await prisma.student.update({
+
+            where: {
+                id: studentId,
+            },
+            data: {
+                name,
+                password: hashPassword,
+                phoneNumber,
+                image: profileImageUrl,
+            },
+            select: {
+                name: true,
+                email: true,
+                phoneNumber: true,
+                image: true,
+            },
+        }); 
+
+        res.status(StatusCodes.OK).json({ message: 'Student profile updated successfully', data: updatedStudent });
+        return;
+
+    } catch (error) {
+
+        console.log(error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: 'Internal Server Error' });
+    }
+};

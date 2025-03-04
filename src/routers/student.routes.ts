@@ -9,6 +9,7 @@ import {
     resendOTP,
     getStudentpastOrders,
     studentPorfile,
+    updateStudentProfile,
 } from '../controllers/student.controller.js';
 
 import { verifyToken } from '../middleware/middleware.js';
@@ -29,5 +30,6 @@ studentRouter.post(
 studentRouter.post('/resendOtp', verifyToken, resendOTP as any);
 studentRouter.get('/getmyorders', verifyToken, getStudentpastOrders as any);
 studentRouter.get('/getprofile', verifyToken, studentPorfile as any);
+studentRouter.post('/profileupdate', verifyToken, updateStudentProfile as any);
 
 export default studentRouter;

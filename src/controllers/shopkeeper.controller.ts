@@ -101,3 +101,45 @@ export const loginShopkeeper = async (req: Request, res: Response) => {
             .json({ message: 'Internal server error' });
     }
 };
+
+
+export const shopKeeperVerfify = async (req: Request, res: Response) => {
+    try {
+        //@ts-ignore
+        const id = req.user;
+        const { otp } = req.body;
+        const shopkeeper = await prisma.shopKeeper.findUnique({
+            where: {
+                id,
+            },
+        });
+        if (!shopkeeper) {
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ message: 'Invalid OTP' });
+        }
+        if(shopkeeper.otp !== otp) {
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ message: 'Invalid OTP' });
+        }
+
+        await prisma.shopKeeper.update({
+            where: {
+                id: shopkeeper.id,
+            },
+            data: {
+                isVerified: true,
+                otp: null,
+            },
+        });
+        return res
+            .status(StatusCodes.OK)
+            .json({ message: 'Shopkeeper verified successfully' });
+    } catch (error) {
+        console.log('Error in shopKeeperVerfify', error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: 'Internal server error' });
+    }
+};
