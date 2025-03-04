@@ -253,3 +253,24 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 };
 
 // get all menu items
+
+
+export const getTotalPendingOrders = async (req: Request, res: Response) => {
+    try {
+        const shopId = req.params.id;
+        const totalPendingOrders = await prisma.order.count({
+            where: {
+                shopId: shopId,
+                status: 'PENDING',
+            },
+        });
+        return res
+            .status(StatusCodes.OK)
+            .json({ pendingOrders: totalPendingOrders });
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: 'Internal Server Error' });
+    }
+};

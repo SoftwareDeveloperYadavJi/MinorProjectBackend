@@ -7,6 +7,7 @@ import {
     getCategories,
     getallPendingOrders,
     updateOrderStatus,
+    getTotalPendingOrders,
 } from '../controllers/shop.controller.js';
 
 const shopeRouter = Router();
@@ -19,5 +20,6 @@ shopeRouter.post('/createcategory/:id', createCategory as any);
 shopeRouter.get('/getcategories/:id', getCategories as any);
 shopeRouter.get('/getallpendingorders/:id', getallPendingOrders as any);
 shopeRouter.put('/updateorderstatus/:id', updateOrderStatus as any);
+shopeRouter.get('/pendingorders/:id', getTotalPendingOrders as any);
 
 export default shopeRouter;
