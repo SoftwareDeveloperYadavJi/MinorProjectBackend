@@ -413,8 +413,8 @@ export const getStudentpastOrders = async (
 export const updateStudentProfile = async (req: coustomRequest, res: Response) => {
     try {
         const studentId = req.user;
-        const { name, password, phoneNumber } = req.body;
-        if (!name  || !password || !phoneNumber) {
+        const { name , phoneNumber } = req.body;
+        if (!name  || !phoneNumber) {
             return res
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ message: 'All fields are required' });
@@ -428,7 +428,7 @@ export const updateStudentProfile = async (req: coustomRequest, res: Response) =
             profileImageUrl = uploadResult.secure_url;
         }
 
-        const hashPassword = await bcrypt.hash(password, 10);
+        // const hashPassword = await bcrypt.hash(password, 10);
 
         const updatedStudent = await prisma.student.update({
 
@@ -437,7 +437,7 @@ export const updateStudentProfile = async (req: coustomRequest, res: Response) =
             },
             data: {
                 name,
-                password: hashPassword,
+                // password: hashPassword,
                 phoneNumber,
                 image: profileImageUrl,
             },
