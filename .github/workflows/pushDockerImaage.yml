@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: nitintech.dev/minorproject:${{ github.sha }}
+          tags: nitiny1524/minorproject:${{ github.sha }}
