@@ -102,7 +102,6 @@ export const loginShopkeeper = async (req: Request, res: Response) => {
     }
 };
 
-
 export const shopKeeperVerfify = async (req: Request, res: Response) => {
     try {
         //@ts-ignore
@@ -118,7 +117,7 @@ export const shopKeeperVerfify = async (req: Request, res: Response) => {
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ message: 'Invalid OTP' });
         }
-        if(shopkeeper.otp !== otp) {
+        if (shopkeeper.otp !== otp) {
             return res
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ message: 'Invalid OTP' });

@@ -218,7 +218,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
                 status,
             },
             include: {
-               student: true
+                student: true,
             },
         });
 
@@ -253,7 +253,6 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 };
 
 // get all menu items
-
 
 export const getTotalPendingOrders = async (req: Request, res: Response) => {
     try {

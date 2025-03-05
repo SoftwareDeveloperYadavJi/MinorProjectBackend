@@ -409,12 +409,14 @@ export const getStudentpastOrders = async (
     }
 };
 
-
-export const updateStudentProfile = async (req: coustomRequest, res: Response) => {
+export const updateStudentProfile = async (
+    req: coustomRequest,
+    res: Response,
+) => {
     try {
         const studentId = req.user;
-        const { name , phoneNumber } = req.body;
-        if (!name  || !phoneNumber) {
+        const { name, phoneNumber } = req.body;
+        if (!name || !phoneNumber) {
             return res
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ message: 'All fields are required' });
@@ -431,7 +433,6 @@ export const updateStudentProfile = async (req: coustomRequest, res: Response) =
         // const hashPassword = await bcrypt.hash(password, 10);
 
         const updatedStudent = await prisma.student.update({
-
             where: {
                 id: studentId,
             },
@@ -447,13 +448,14 @@ export const updateStudentProfile = async (req: coustomRequest, res: Response) =
                 phoneNumber: true,
                 image: true,
             },
-        }); 
+        });
 
-        res.status(StatusCodes.OK).json({ message: 'Student profile updated successfully', data: updatedStudent });
+        res.status(StatusCodes.OK).json({
+            message: 'Student profile updated successfully',
+            data: updatedStudent,
+        });
         return;
-
     } catch (error) {
-
         console.log(error);
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
