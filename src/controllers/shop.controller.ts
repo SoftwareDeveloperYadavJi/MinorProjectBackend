@@ -240,10 +240,11 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
         //     .catch((error) => {
         //         console.log('Error sending message:', error);
         // });
-        // return res.status(StatusCodes.OK).json({
-        //     message: 'Order status updated successfully',
-        //     data: updatedOrder,
-        // });
+        return res.status(StatusCodes.OK).json({
+            studentName: updatedOrder.student.name,
+            message: 'Order status updated successfully',
+            data: updatedOrder,
+        });
     } catch (error) {
         console.log(error);
         return res
