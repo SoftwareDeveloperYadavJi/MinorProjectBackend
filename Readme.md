@@ -1,4 +1,4 @@
-# Campus Cuisine Backend
+# CROWDEASE Backend
 
 This is the backend of Campus Cuisine, a food ordering platform for Parul University students. It is built using Node.js, Express, Prisma, and TypeScript.
 
