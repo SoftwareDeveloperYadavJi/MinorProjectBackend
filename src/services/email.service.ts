@@ -19,7 +19,7 @@ export class EmailSender {
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Welcome to Parul University Campus Cuisine</title>
+          <title>Welcome to Parul University CROWDEASE</title>
         </head>
         <body style="font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; line-height: 1.6;">
           <div style="max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);">
@@ -31,11 +31,11 @@ export class EmailSender {
               </div>
             </div>
             <div style="text-align: center; color: #E73B4E; font-size: 28px; font-weight: 600; margin-bottom: 25px;">
-              Welcome to <span style="color: #E73B4E; font-weight: bold;">Parul University</span> Campus Cuisine
+              Welcome to <span style="color: #E73B4E; font-weight: bold;">Parul University</span> CROWDEASE
             </div>
             <div style="color: #2c3e50; font-size: 16px; margin-bottom: 25px; text-align: left;">
               <p>Dear <strong>${userName}</strong>,</p>
-              <p>Thank you for joining <strong>Campus Cuisine</strong>, Parul University's official food ordering platform.
+              <p>Thank you for joining <strong>CROWDEASE</strong>, Parul University's official food ordering platform.
               We're excited to enhance your campus dining experience with our smart ordering system.</p>
             </div>
             <div style="background: #E73B4E; color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 30px 0;">
@@ -55,7 +55,7 @@ export class EmailSender {
               <div style="margin: 10px 0; color: #2c3e50;">🎯 Exclusive deals for Parul University students</div>
             </div>
             <div style="text-align: center; color: #666; font-size: 14px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-              <p style="margin: 5px 0;">&copy; 2025 Parul University Campus Cuisine</p>
+              <p style="margin: 5px 0;">&copy; 2025 Parul University CROWDEASE</p>
               <p style="margin: 5px 0;">Vadodara, Gujarat, India</p>
               <p style="margin: 5px 0;">Making Campus Dining Smarter</p>
             </div>
@@ -69,7 +69,7 @@ export class EmailSender {
                 from: process.env.MAIL_FROM || 'support@nitintech.dev', // Use your Resend verified domain
                 to: to,
                 subject:
-                    'Welcome to Parul University Campus Cuisine - Verify Your Account',
+                    'Welcome to Parul University CROWDEASE - Verify Your Account',
                 html: html,
             });
 
