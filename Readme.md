@@ -1,6 +1,6 @@
 # CROWDEASE Backend
 
-This is the backend of CROWDEASE, a food ordering platform for Parul University students. It is built using Node.js, Express, Prisma, and TypeScript.
+**CROWDEASE** is a food ordering platform for **Parul University** students, built with **Node.js, Express, Prisma, and TypeScript**. It allows users to seamlessly place orders, track their status, and receive estimated wait times based on real-time crowd detection in different food courts. By analyzing crowd density, the platform helps students choose less crowded areas, reducing waiting times and enhancing their dining experience. With a secure and scalable backend, **CROWDEASE** ensures efficient order management, smooth transactions, and an optimized food court experience for students. 🚀
 
 ## Features
 
