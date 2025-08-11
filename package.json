@@ -9,12 +9,13 @@
     "start": "node dist/index.js",
     "lint": "eslint src --ext .js,.ts",
     "lint:fix": "eslint src --ext .js,.ts--fix",
-    "format": "prettier --write 'src/**/*.{js,ts,json,md}'"
+    "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
+    "prisma:generate": "prisma generate"
   },
   "keywords": [],
   "author": "Nitin Yadav",
   "license": "ISC",
-  "description": "This is the backend of Campus Cuisine, a food ordering platform for Parul University students. It is built using Node.js, Express, Prisma, and TypeScript.",
+  "description": "This is the backend of CROWDEASE, a food ordering platform for Parul University students. It is built using Node.js, Express, Prisma, and TypeScript.",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.1",

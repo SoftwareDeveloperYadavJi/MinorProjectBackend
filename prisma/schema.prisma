@@ -23,6 +23,7 @@ model Student {
   updatedAt         DateTime  @updatedAt
   phoneNumber       String    @unique
   orders            Order[]
+  payments          payment[]
 }
 
 model ShopKeeper {
@@ -62,6 +63,7 @@ model Shop {
   foodCourt      FoodCourt        @relation(fields: [foodCourtId], references: [id])
   shopKeeper     ShopKeeper       @relation(fields: [shopKeeperId], references: [id])
   analytics      ShopAnalytics?
+  payments       payment[]
 }
 
 model ShopAnalytics {
@@ -111,6 +113,22 @@ model DailyReport {
   topSellingItems Json
   analytics       ShopAnalytics @relation(fields: [analyticsId], references: [id])
   feedback        Feedback[]
+}
+
+model payment{
+  id                String        @id @default(cuid())
+  orderId           String
+  shopId            String
+  studentId         String
+  paymentId         String
+  paymentMethod     PaymentMethod
+  paymentStatus     PaymentStatus
+  amount            Decimal       @db.Decimal(10, 2)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  order             Order         @relation(fields: [orderId], references: [id])
+  shop              Shop          @relation(fields: [shopId], references: [id])
+  student           Student       @relation(fields: [studentId], references: [id])
 }
 
 model MonthlyReport {
@@ -170,6 +188,7 @@ model Order {
   items           OrderItem[]
   foodCourtId     String
   foodCourt       FoodCourt     @relation(fields: [foodCourtId], references: [id])
+  payments        payment[]
 }
 
 model OrderItem {

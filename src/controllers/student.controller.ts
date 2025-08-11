@@ -462,3 +462,112 @@ export const updateStudentProfile = async (
             .json({ message: 'Internal Server Error' });
     }
 };
+
+
+export const makePayment = async (req: coustomRequest, res: Response) => {
+    try {
+        const studentId = req.user;
+        console.log(studentId);
+        const student = await prisma.student.findUnique({
+            where: {
+                id: studentId,
+            },
+        });
+        console.log(student);
+        if (!student) {
+            return res
+                .status(StatusCodes.NOT_FOUND)
+                .json({ error: 'Student not found' });
+        }
+
+        const { shopId, paymentMethod, totalAmount, paymentId , paymentStatus, orderId } = req.body; 
+        // Validate input
+        if (
+            !studentId ||
+            !shopId ||
+            !totalAmount ||
+            !paymentMethod ||
+            !paymentId ||
+            !orderId || 
+            !paymentStatus
+        ) {
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ error: 'All fields are required' });
+        }
+
+        // Create payment in the database
+        if (orderId == null) {
+            return res
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
+                .json({ error: 'Error while generating order number' });
+        }
+        
+        const newPayment = await prisma.payment.create({
+            data: {
+                orderId: orderId,
+                shopId: shopId,
+                paymentId: paymentId,
+                paymentMethod: paymentMethod,
+                paymentStatus: paymentStatus,
+                amount: totalAmount,
+                studentId: studentId,
+            },
+           
+        });
+
+        const order = await prisma.order.update({
+            where: {
+                id: orderId,
+            },
+            data: {
+                paymentStatus: "COMPLETED",
+            },
+            include: { items: true },
+        });
+
+        res.status(StatusCodes.CREATED).json({
+            message: 'Payment created successfully',
+            payment: newPayment,
+            order: order,
+        });
+        return;
+    } catch (error) {
+        
+        console.error(error);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            error: 'Something went wrong',
+        });
+        return;
+    }
+};
+
+
+// get all payments copleted order by student
+export const getPayments = async (req: coustomRequest, res: Response) => {
+    try {
+        const studentId = req.user;
+        const student = await prisma.student.findUnique({
+            where: {
+                id: studentId,
+            },
+        });
+        if (!student) {
+            return res
+                .status(StatusCodes.NOT_FOUND)
+                .json({ error: 'Student not found' });
+        }
+        const payments = await prisma.payment.findMany({
+            where: {
+                studentId: studentId,
+                paymentStatus: "COMPLETED",
+            },
+        });
+        return res.status(StatusCodes.OK).json({ data: payments });
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: 'Internal Server Error' });
+    }
+};
