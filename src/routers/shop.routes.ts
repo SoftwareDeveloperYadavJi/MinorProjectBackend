@@ -9,11 +9,12 @@ import {
     updateOrderStatus,
     getTotalPendingOrders,
 } from '../controllers/shop.controller.js';
+import { verifyToken } from '../middleware/middleware.js';
 
 const shopeRouter = Router();
 
 // shop API
-shopeRouter.post('/add', addShop as any);
+shopeRouter.post('/add', verifyToken, addShop as any);
 shopeRouter.post('/addmenu/:id', addMenu as any);
 shopeRouter.get('/getmenus/:id', getMenus as any);
 shopeRouter.post('/createcategory/:id', createCategory as any);

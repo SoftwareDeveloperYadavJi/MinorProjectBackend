@@ -5,13 +5,17 @@ import { StatusCodes } from 'http-status-codes';
 // const registrationToken = 'dZjLC_2EQA25lASLviqxLu:APA91bGyYb6o8chThaI4uSd_WmxPY2_2qu_vTLOw9cdhKybVP1-Buaad6ywMVP_QJMqCM74RnMMm056-W7Fvv2c_aqgoZYxHTghJTJTz4MNjNnFd3zQZeoY';
 const prisma = new PrismaClient();
 
-export const addShop = async (req: Request, res: Response) => {
+interface CustomRequest extends Request {
+    user?: string;
+}
+
+
+export const addShop = async (req: CustomRequest, res: Response) => {
     try {
         const {
             name,
             description,
             foodCourtId,
-            shopKeeperId,
             gstNumber,
             images,
             license,
@@ -19,6 +23,13 @@ export const addShop = async (req: Request, res: Response) => {
             contactPhone,
             operatingHours,
         } = req.body;
+
+        const shopKeeperId = req.user; 
+
+        if(!shopKeeperId){
+            return res.status(StatusCodes.BAD_REQUEST).json({message: "Shopkeeper not found"});
+        }
+        
 
         // Check if the shop already exists
         const shopExist = await prisma.shop.findFirst({
