@@ -7,10 +7,11 @@ import {
     dectectDensity,
     cerateOrder,
     resendOTP,
-    getStudentpastOrders,
+    getStudentPastOrders,
     studentPorfile,
     updateStudentProfile,
     makePayment,
+    OrderDetailsbyId
 } from '../controllers/student.controller.js';
 
 import { verifyToken } from '../middleware/middleware.js';
@@ -29,10 +30,12 @@ studentRouter.post(
     cerateOrder as any,
 );
 studentRouter.post('/resendOtp', verifyToken, resendOTP as any);
-studentRouter.get('/getmyorders', verifyToken, getStudentpastOrders as any);
+studentRouter.get('/getmyorders', verifyToken, getStudentPastOrders as any);
 studentRouter.get('/getprofile', verifyToken, studentPorfile as any);
 studentRouter.post('/profileupdate', verifyToken, updateStudentProfile as any);
 studentRouter.post('/makepayment', verifyToken, makePayment as any);
+
+studentRouter.get('/orderdetails/:id', verifyToken, OrderDetailsbyId as any);
 
 
 export default studentRouter;

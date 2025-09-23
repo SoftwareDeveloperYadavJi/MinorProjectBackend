@@ -321,9 +321,26 @@ export const cerateOrder = async (req: coustomRequest, res: Response) => {
             include: { items: true },
         });
 
+
+        // select only oderNumber and items and shopId and studentId make id as odredID in reponse
+        const order = await prisma.order.findUnique({
+            where: {
+                id: newOrder.id,
+            },
+            select: {
+                foodCourtId: true,
+                orderNumber: true,
+                id: true,
+                shopId: true,
+                studentId: true,
+            },
+        });
+       
+        
+
         res.status(StatusCodes.CREATED).json({
             message: 'Order created successfully',
-            order: newOrder,
+            order: order,
         });
         return;
     } catch (error) {
@@ -378,36 +395,108 @@ export const resendOTP = async (req: coustomRequest, res: Response) => {
         return;
     }
 };
-
-export const getStudentpastOrders = async (
+export const getStudentPastOrders = async (
     req: coustomRequest,
     res: Response,
 ) => {
     try {
         const studentId = req.user;
+
         const student = await prisma.student.findUnique({
-            where: {
-                id: studentId,
-            },
+            where: { id: studentId },
         });
+
         if (!student) {
             return res
                 .status(StatusCodes.NOT_FOUND)
                 .json({ error: 'Student not found' });
         }
+
         const orders = await prisma.order.findMany({
-            where: {
-                studentId: studentId,
+            where: { studentId },
+            orderBy: { createdAt: 'desc' }, // latest first
+            select: {
+                id: true,
+                orderNumber: true,
+                totalAmount: true,
+                status: true,
+                createdAt: true,
+                paymentStatus: true,
+                paymentMethod: true,
+                // items: {
+                //     select: {
+                //         id: true,
+                //         quantity: true,
+                //         price: true,
+                //         notes: true,
+                //         menuItem: {
+                //             select: {
+                //                 id: true,
+                //                 name: true,
+                //                 description: true,
+                //                 price: true,
+                //                 image: true,
+                //             },
+                //         },
+                //     },
+                // },
             },
         });
+
         return res.status(StatusCodes.OK).json({ data: orders });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
             .json({ message: 'Internal Server Error' });
     }
 };
+
+
+
+export const OrderDetailsbyId = async (req: coustomRequest, res: Response) => {
+    try {
+        const orderId = req.params.id;
+        const order = await getOderDetails(orderId);
+        return res.status(StatusCodes.OK).json({ data: order });
+    } catch (error) {
+        console.error(error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: 'Internal Server Error' });
+    }
+};
+const getOderDetails = async (orderId: string) => {
+    const order = await prisma.order.findUnique({
+        where: {
+            id: orderId,
+        },
+        select: {
+            id: true,
+            totalAmount: true,
+            status: true,
+            items: {
+                select: {
+                    quantity: true,
+                    menuItem: {
+                        select: {
+                            name: true,
+                            description: true,
+                            price: true,
+                            image: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+    return order;
+};
+
+
+
+
+
 
 export const updateStudentProfile = async (
     req: coustomRequest,
@@ -488,7 +577,7 @@ export const makePayment = async (req: coustomRequest, res: Response) => {
             !totalAmount ||
             !paymentMethod ||
             !paymentId ||
-            !orderId || 
+            !orderId ||  
             !paymentStatus
         ) {
             return res
@@ -521,15 +610,30 @@ export const makePayment = async (req: coustomRequest, res: Response) => {
                 id: orderId,
             },
             data: {
-                paymentStatus: "COMPLETED",
+                paymentStatus: paymentStatus,
             },
-            include: { items: true },
+
         });
+
+        
+        const paymentResponse = await prisma.order.findUnique({
+            where: {
+                id: orderId,
+            },
+            select: {
+                paymentStatus: true,
+                totalAmount: true,
+                orderNumber: true,
+                id: true,
+                shopId: true,
+            },
+        });
+
+
 
         res.status(StatusCodes.CREATED).json({
             message: 'Payment created successfully',
-            payment: newPayment,
-            order: order,
+            payment: paymentResponse
         });
         return;
     } catch (error) {

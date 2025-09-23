@@ -122,7 +122,7 @@ model payment{
   studentId         String
   paymentId         String
   paymentMethod     PaymentMethod
-  paymentStatus     PaymentStatus
+  paymentStatus     PaymentStatus 
   amount            Decimal       @db.Decimal(10, 2)
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
