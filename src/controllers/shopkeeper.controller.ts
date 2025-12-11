@@ -85,7 +85,7 @@ export const loginShopkeeper = async (req: Request, res: Response) => {
         // generating token
         const token = jsonwebtoken.sign(
             { id: shopkeeper.id },
-            process.env.JWT_SECRET!,
+            process.env.JWT_SECRET_SHOP!,
             {
                 expiresIn: '1d',
             },

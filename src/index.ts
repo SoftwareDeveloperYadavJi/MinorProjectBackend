@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/healthcheck', (req, res) => {
-    res.status(StatusCodes.OK).json({ message: 'API is working fine!' });
+    res.status(StatusCodes.OK).json({ message: 'API is working fine! hello' });
 });
 
 // routes
